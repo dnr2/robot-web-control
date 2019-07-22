@@ -8,8 +8,8 @@
         function start_streaming_video() {
             // get video dom element
             const video = document.querySelector('video');
-            const WIDTH = document.getElementById("width").value;
-            const HEIGHT = document.getElementById("height").value;
+            const WIDTH = parseInt(document.getElementById("width").value, 10);
+            const HEIGHT = parseInt(document.getElementById("height").value, 10);
 
             // request access to webcam
             navigator.mediaDevices.getUserMedia({video: {width: WIDTH, height: HEIGHT}}).then((stream) => 
@@ -26,7 +26,7 @@
             }
             const WS_URL = location.origin.replace(/^http/, 'ws');
             const TOKEN = document.getElementById("token").value;
-            const FPS = document.getElementById("token").value;
+            const FPS = parseInt(document.getElementById("token").value, 10);
             const ws = new WebSocket(WS_URL, TOKEN);
             ws.onopen = () => {
                 console.log(`Connected to ${WS_URL}`);
