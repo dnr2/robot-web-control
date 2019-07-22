@@ -29,6 +29,8 @@ const wsServer = new WebSocket.Server({server: server}, () =>
 // array of connected websocket clients
 let connectedClients = [];
 
+var iter = 0;
+
 wsServer.on('connection', (ws, req) => {
 	console.log("Attempt connection");
 	token = req.headers['sec-websocket-protocol'];
@@ -41,6 +43,8 @@ wsServer.on('connection', (ws, req) => {
 	}
 
 	ws.on('message', data => {
+		console.log(iter);
+		iter += 1;
     	// listen for messages from the streamer, the clients will not send anything so we don't need to filter
     	if (connectedClients.indexOf(ws) >= 0) {
 	        // send the base64 encoded frame to each connected ws
