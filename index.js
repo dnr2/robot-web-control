@@ -1,12 +1,13 @@
 const path = require('path');
 const express = require('express');
+const http = require("http")
 const WebSocket = require('ws');
 
 const app = express();
 
 // const WS_PORT = process.env.WS_PORT || 3001;
 const HTTP_PORT = process.env.PORT || 3000;
-const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || '';
+const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN;
 
 /////////////////////////////////////
 // HTTP stuff
@@ -14,15 +15,16 @@ const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || '';
 
 app.get('/client', (req, res) => res.sendFile(path.resolve(__dirname, './client.html')));
 app.get('/streamer', (req, res) => res.sendFile(path.resolve(__dirname, './streamer.html')));
-app.listen(HTTP_PORT, () => console.log(`HTTP server listening at http://localhost:${HTTP_PORT}`));
+const server = http.createServer(app);
+server.listen(HTTP_PORT);
+console.log(`HTTP server listening at http://localhost:${HTTP_PORT}`);
 
 /////////////////////////////////////
 // Web sockets
 /////////////////////////////////////
 
-/*
-const wsServer = new WebSocket.Server({ port: WS_PORT }, () => 
-	console.log(`WS server is listening at ws://localhost:${WS_PORT}`));
+const wsServer = new WebSocket.Server({server: server}, () => 
+	console.log(`WS server is listening at ws://localhost:${HTTP_PORT}`));
 
 // array of connected websocket clients
 let connectedClients = [];
@@ -55,4 +57,3 @@ wsServer.on('connection', (ws, req) => {
     });
 
 });
-*/

@@ -5,17 +5,23 @@
 <body>
     <img src="">
     <script>
-        // get img dom element
-        const img = document.querySelector('img');
-        
-        const WS_URL = 'ws://localhost:3001';
-        const token = 'danilo123token';
-        const ws = new WebSocket(WS_URL, token);
-        ws.onopen = () => console.log(`Connected to ${WS_URL}`);
-        ws.onmessage = message => {
-            // set the base64 string to the src tag of the image
-            img.src = message.data;
+        function start_streaming_video() {
+            // get img dom element
+            const img = document.querySelector('img');
+            
+            const WS_URL = location.origin.replace(/^http/, 'ws');
+            const TOKEN = document.getElementById("token").value;
+            const ws = new WebSocket(WS_URL, TOKEN);
+            ws.onopen = () => console.log(`Connected to ${WS_URL}`);
+            ws.onmessage = message => {
+                // set the base64 string to the src tag of the image
+                img.src = message.data;
+            }
         }
     </script>
+    <p>
+        Access token: <input type="text" id="token" name="token" value=""><br>
+        <input onclick="start_streaming_video()" type="submit" value="Submit">
+    </p>
 </body>
 </html>
