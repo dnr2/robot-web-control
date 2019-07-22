@@ -7,7 +7,7 @@ const app = express();
 
 // const WS_PORT = process.env.WS_PORT || 3001;
 const HTTP_PORT = process.env.PORT || 3000;
-const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN;
+const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "danilo123token";
 
 /////////////////////////////////////
 // HTTP stuff

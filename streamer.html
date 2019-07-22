@@ -8,9 +8,11 @@
         function start_streaming_video() {
             // get video dom element
             const video = document.querySelector('video');
-            
+            const WIDTH = document.getElementById("width").value;
+            const HEIGHT = document.getElementById("height").value;
+
             // request access to webcam
-            navigator.mediaDevices.getUserMedia({video: {width: 256, height: 144}}).then((stream) => 
+            navigator.mediaDevices.getUserMedia({video: {width: WIDTH, height: HEIGHT}}).then((stream) => 
                 video.srcObject = stream);
             
             // returns a frame encoded in base64
@@ -24,7 +26,7 @@
             }
             const WS_URL = location.origin.replace(/^http/, 'ws');
             const TOKEN = document.getElementById("token").value;
-            const FPS = 60;
+            const FPS = document.getElementById("token").value;
             const ws = new WebSocket(WS_URL, TOKEN);
             ws.onopen = () => {
                 console.log(`Connected to ${WS_URL}`);
@@ -36,6 +38,9 @@
     </script>
     <p>
         Access token: <input type="text" id="token" name="token" value=""><br>
+        Frames Per Second (FPS): <input type="text" id="fps" name="fps" value="10"><br>
+        Video Width: <input type="text" id="width" name="width" value="128"><br>
+        Video Height: <input type="text" id="height" name="height" value="72"><br>
         <input onclick="start_streaming_video()" type="submit" value="Submit">
     </p>
 </body>
