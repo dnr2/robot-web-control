@@ -28,7 +28,10 @@
             }
             const WS_URL = location.origin.replace(/^http/, 'ws');
             const TOKEN = document.getElementById("token").value;
-            const FPS = parseFloat(document.getElementById("token").value, 10);
+            const FPS = parseFloat(document.getElementById("fps").value);
+            const INTERVAL = 1000 / FPS
+            console.log(`Sending data every ${INTERVAL} miliseconds`);
+
             const ws = new WebSocket(WS_URL, TOKEN);
             ws.onopen = () => {
                 console.log(`Connected to ${WS_URL}`);
@@ -36,7 +39,7 @@
                     console.log(iter);
                     iter += 1;
                     ws.send(getFrame());
-                }, 1000 / FPS);
+                }, INTERVAL);
             }
         }
     </script>
