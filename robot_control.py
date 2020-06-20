@@ -1,11 +1,13 @@
-import websocket
-import argparse
+#-*- coding:UTF-8 -*-
 import RPi.GPIO as GPIO
 import time
 
-###################################################
-## ROBOT STUFF
-###################################################
+from input_test import getch
+from flask import Flask
+from flask import request
+
+# Initialize flask server app
+# app = Flask(__name__)
 
 #Definition of  motor pin 
 IN1 = 20
@@ -43,6 +45,11 @@ ServoPOSV = 90 # Vertical
 def motor_init():
     global pwm_ENA
     global pwm_ENB
+    '''
+    global pwm_servoF
+    global pwm_servoH
+    global pwm_servoV
+    '''
 
     global delaytime
     GPIO.setup(ENA,GPIO.OUT,initial=GPIO.HIGH)
@@ -65,6 +72,16 @@ def motor_init():
     pwm_ENB = GPIO.PWM(ENB, 2000)
     pwm_ENA.start(0)
     pwm_ENB.start(0)
+    
+    '''
+    pwm_servoF = GPIO.PWM(ServoPinF, 50)
+    pwm_servoH = GPIO.PWM(ServoPinH, 50)
+    pwm_servoV = GPIO.PWM(ServoPinV, 50)
+
+    pwm_servoF.start(0)
+    pwm_servoH.start(0)
+    pwm_servoV.start(0)
+    '''
 
 #advance
 def run(delaytime):
@@ -145,81 +162,62 @@ def servo_pulse(myangle, ServoPin):
     GPIO.output(ServoPin, GPIO.LOW)
     time.sleep(20.0/1000-pulsewidth/1000000.0)
 
-def run_command(motion):
+#Delay 2s	
+time.sleep(2)
+
+#The try/except statement is used to detect errors in the try block.
+#the except statement catches the exception information and processes it.
+#The robot car advance 1s，back 1s，turn left 2s，turn right 2s，turn left  in place 3s
+#turn right  in place 3s，stop 1s。
+
+# @app.route("/")
+def main():
     global ServoPOSH
     global ServoPOSV
     global ServoPinH
     global ServoPinV
+    while True:
+        # motion = request.args.get('command')
+        motion = getch()
+        if motion == "w":
+            run(0.5)
+        elif motion == "s":
+            back(0.5)
+        elif motion == "a":
+            left(0.1)
+        elif motion == "d":
+             right(0.1)
+        elif motion == "q":
+            spin_left(0.1)
+        elif motion == b"e":
+            spin_right(0.1)
+        elif motion == "l":
+            ServoPOSH = max(30, ServoPOSH - 10)
+            servo_pulse(ServoPOSH, ServoPinH)
+        elif motion == "j":
+            ServoPOSH = min(150, ServoPOSH + 10)
+            servo_pulse(ServoPOSH, ServoPinH)
+        elif motion == "k":
+            ServoPOSV = max(30, ServoPOSV - 10)
+            servo_pulse(ServoPOSV, ServoPinV)
+        elif motion == "i":
+            ServoPOSV = min(150, ServoPOSV + 10)
+            servo_pulse(ServoPOSV, ServoPinV)
+        brake(0.01)
+        if motion == "p":
+            break
+            # func = request.environ.get('werkzeug.server.shutdown')
+            # print("shutting down server")
+            #func()
+    #except KeyboardInterrupt:
+    #    pass
+    #return "Hello world!"
 
-    if motion == "w":
-        run(0.5)
-        run(0.5)
-    elif motion == "s":
-        back(0.5)
-    elif motion == "a":
-        left(0.1)
-    elif motion == "d":
-         right(0.1)
-    elif motion == "q":
-        spin_left(0.1)
-    elif motion == "e":
-        spin_right(0.1)
-    elif motion == "l":
-        ServoPOSH = max(30, ServoPOSH - 10)
-        servo_pulse(ServoPOSH, ServoPinH)
-    elif motion == "j":
-        ServoPOSH = min(150, ServoPOSH + 10)
-        servo_pulse(ServoPOSH, ServoPinH)
-    elif motion == "k":
-        ServoPOSV = max(30, ServoPOSV - 10)
-        servo_pulse(ServoPOSV, ServoPinV)
-    elif motion == "i":
-        ServoPOSV = min(150, ServoPOSV + 10)
-        servo_pulse(ServoPOSV, ServoPinV)
-    brake(0.01)
-
-###################################################
-## WEBSOCKETS STUFF
-###################################################
-
-try:
-    import thread
-except ImportError:
-    import _thread as thread
-import time
-
-def on_message(ws, message):
-    print(message)
-    run_command(message)
-    
-def on_error(ws, error):
-    print("error = ", error)
-
-def on_close(ws):
-    print("### closed ###")
+if __name__ == '__main__':
+    motor_init()
+    # app.run()
+    main()
     pwm_ENA.stop()
     pwm_ENB.stop()
-    GPIO.cleanup()
+    GPIO.cleanup() 
 
-if __name__ == "__main__":
-    motor_init()
-    
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--token", help="Access token")
-    args = parser.parse_args()
-    if args.token is not None:
-        token = args.token
-    else:
-        print("access token argument (--token xxx) is required!")
-        exit(1)
-
-    websocket.enableTrace(True)
-    url = "ws://danilo-robot.herokuapp.com/robot"
-
-    protocol_str = "sec-websocket-protocol: " + token
-    ws = websocket.WebSocketApp(url,
-        on_message = on_message,
-        on_error = on_error,
-        on_close = on_close,
-        header = [protocol_str])
-    ws.run_forever()
