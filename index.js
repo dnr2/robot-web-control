@@ -37,9 +37,10 @@ wsServer.on('connection', (ws, req) => {
 
 	if (ROBOT_AUTH_TOKEN.length > 10 && token === ROBOT_AUTH_TOKEN) {
 		//now is authenticated
-		console.log('Connected');
+		console.log('Connected client');
 	    // add new connected client
 	    connectedClients.push(ws);
+	    console.log('Total connected = ' + connectedClients.length);
 	}
 
 	ws.on('message', data => {
