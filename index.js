@@ -7,7 +7,7 @@ const app = express();
 
 const HTTP_PORT = process.env.PORT || 3000;
 // For authentication token look at the environment variable.
-const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "";
+const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "danilo123token";
 
 /////////////////////////////////////
 // HTTP stuff

@@ -1,12 +1,16 @@
 <html>
 <head>
-    <title>Streamer</title>
+    <title>Controller</title>
 </head>
 <body>
     <p>
-        Access token: <input type="text" id="token" name="token" value=""><br>        
-        <input onclick="connect_to_robot()" type="submit" value="Submit">
-        <input onclick="move_forward()" type="submit" value="Submit">
+        Access token: <input type="text" id="token" name="token" value=""><br>
+        <input onclick="connect_to_robot()" type="submit" value="Submit"><br>        
+        <hr>
+        <input onclick="move_forward()" type="submit" value="Move Forward"><br>
+        <input onclick="move_backward()" type="submit" value="Move Backward"><br>
+        <input onclick="move_left()" type="submit" value="Move Left"><br>
+        <input onclick="move_right()" type="submit" value="Move Right"><br>
     </p>
 <script type="text/javascript">
 /////////////////////////////////////
@@ -55,6 +59,27 @@ function connect_to_robot() {
 function move_forward() {
     send_message({
         "command": "move_forward", 
+        "args": {}
+    });
+}
+
+function move_backward() {
+    send_message({
+        "command": "move_backward", 
+        "args": {}
+    });
+}
+
+function move_left() {
+    send_message({
+        "command": "move_left", 
+        "args": {}
+    });
+}
+
+function move_right() {
+    send_message({
+        "command": "move_right", 
         "args": {}
     });
 }
