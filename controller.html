@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Streamer</title>
+</head>
+<body>
+    <p>
+        Access token: <input type="text" id="token" name="token" value=""><br>        
+        <input onclick="connect_to_robot()" type="submit" value="Submit">
+        <input onclick="move_forward()" type="submit" value="Submit">
+    </p>
+<script type="text/javascript">
+/////////////////////////////////////
+// Web sockets
+/////////////////////////////////////
+
+var ws = null;
+
+function start_connection(url, token) {
+    ws = new WebSocket(url, token);
+    return ws;
+}
+
+function send_message(data) {
+    if (ws === null) {
+        alert("Need to start connection first!!");
+    } else {
+        data = JSON.stringify(data);
+        ws.send(data);
+    }
+}
+
+/////////////////////////////////////
+// Game
+/////////////////////////////////////
+
+function connect_to_robot() {
+    const ws_url = location.origin.replace(/^http/, 'ws');
+    const token = document.getElementById("token").value;
+    
+    ws = start_connection(ws_url, token)
+
+    ws.onopen = () => { 
+        console.log(`Connected to ${ws_url}`);
+        join_as_player();
+    }
+
+    ws.onmessage = message => {
+        data = JSON.parse(message.data);
+        execute_command(data);
+    }
+}
+
+// Send commands
+
+function move_forward() {
+    send_message({
+        "command": "move_forward", 
+        "args": {}
+    });
+}
+
+</script>
+</body>
+</html>
