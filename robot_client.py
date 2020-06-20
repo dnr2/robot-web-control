@@ -210,7 +210,7 @@ if __name__ == "__main__":
     if args.token is not None:
         token = args.token
     else:
-        print("access token argument (--token xxx) is required!")
+        print("Access token argument (--token xxx) is required!")
         exit(1)
 
     websocket.enableTrace(True)

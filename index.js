@@ -5,9 +5,9 @@ const WebSocket = require('ws');
 
 const app = express();
 
-// const WS_PORT = process.env.WS_PORT || 3001;
 const HTTP_PORT = process.env.PORT || 3000;
-const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "danilo123token";
+// For authentication token look at the environment variable.
+const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "";
 
 /////////////////////////////////////
 // HTTP stuff
@@ -15,8 +15,11 @@ const ROBOT_AUTH_TOKEN = process.env.ROBOT_AUTH_TOKEN || "danilo123token";
 
 app.get('/client', (req, res) => res.sendFile(path.resolve(__dirname, './client.html')));
 app.get('/streamer', (req, res) => res.sendFile(path.resolve(__dirname, './streamer.html')));
+app.get('/controller', (req, res) => res.sendFile(path.resolve(__dirname, './controller.html')));
+
 const server = http.createServer(app);
 server.listen(HTTP_PORT);
+
 console.log(`HTTP server listening at http://localhost:${HTTP_PORT}`);
 
 /////////////////////////////////////
@@ -37,9 +40,10 @@ wsServer.on('connection', (ws, req) => {
 
 	if (ROBOT_AUTH_TOKEN.length > 10 && token === ROBOT_AUTH_TOKEN) {
 		//now is authenticated
-		console.log('Connected');
+		console.log('Connected client');
 	    // add new connected client
 	    connectedClients.push(ws);
+	    console.log('Total connected = ' + connectedClients.length);
 	}
 
 	ws.on('message', data => {
