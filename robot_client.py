@@ -152,29 +152,29 @@ def run_command(motion):
     global ServoPinH
     global ServoPinV
 
-    if motion == "w":
+    if motion == "move_forward":
         run(0.5)
         run(0.5)
-    elif motion == "s":
+    elif motion == "move_backward":
         back(0.5)
-    elif motion == "a":
+    elif motion == "move_left":
         left(0.1)
-    elif motion == "d":
-         right(0.1)
-    elif motion == "q":
+    elif motion == "move_right":
+        right(0.1)
+    elif motion == "spin_left":
         spin_left(0.1)
-    elif motion == "e":
+    elif motion == "spin_right":
         spin_right(0.1)
-    elif motion == "l":
+    elif motion == "cam_up":
         ServoPOSH = max(30, ServoPOSH - 10)
         servo_pulse(ServoPOSH, ServoPinH)
-    elif motion == "j":
+    elif motion == "cam_down":
         ServoPOSH = min(150, ServoPOSH + 10)
         servo_pulse(ServoPOSH, ServoPinH)
-    elif motion == "k":
+    elif motion == "cam_left":
         ServoPOSV = max(30, ServoPOSV - 10)
         servo_pulse(ServoPOSV, ServoPinV)
-    elif motion == "i":
+    elif motion == "cam_right":
         ServoPOSV = min(150, ServoPOSV + 10)
         servo_pulse(ServoPOSV, ServoPinV)
     brake(0.01)
@@ -220,7 +220,7 @@ if __name__ == "__main__":
         exit(1)
 
     websocket.enableTrace(True)
-    url = LOCALHOST_URL
+    url = HEROKU_URL
 
     protocol_str = "sec-websocket-protocol: " + token
     ws = websocket.WebSocketApp(url,

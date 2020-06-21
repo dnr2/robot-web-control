@@ -11,6 +11,13 @@
         <input onclick="move_backward()" type="submit" value="Move Backward"><br>
         <input onclick="move_left()" type="submit" value="Move Left"><br>
         <input onclick="move_right()" type="submit" value="Move Right"><br>
+        <input onclick="spin_left()" type="submit" value="Spin Left"><br>
+        <input onclick="spin_right()" type="submit" value="Spin Right"><br>
+        <hr>
+        <input onclick="cam_up()" type="submit" value="Camera Up"><br>
+        <input onclick="cam_down()" type="submit" value="Camera Down"><br>
+        <input onclick="cam_left()" type="submit" value="Camera Left"><br>
+        <input onclick="cam_right()" type="submit" value="Camera Right"><br>
     </p>
 <script type="text/javascript">
 /////////////////////////////////////
@@ -58,29 +65,61 @@ function connect_to_robot() {
 
 function move_forward() {
     send_message({
-        "command": "move_forward", 
-        "args": {}
+        "command": "move_forward"
     });
 }
 
 function move_backward() {
     send_message({
-        "command": "move_backward", 
-        "args": {}
+        "command": "move_backward"
     });
 }
 
 function move_left() {
     send_message({
-        "command": "move_left", 
-        "args": {}
+        "command": "move_left"
     });
 }
 
 function move_right() {
     send_message({
-        "command": "move_right", 
-        "args": {}
+        "command": "move_right"
+    });
+}
+
+function spin_right() {
+    send_message({
+        "command": "spin_right"
+    });
+}
+
+function spin_left() {
+    send_message({
+        "command": "spin_left"
+    });
+}
+
+function cam_up() {
+    send_message({
+        "command": "cam_up"
+    });
+}
+
+function cam_down() {
+    send_message({
+        "command": "cam_down"
+    });
+}
+
+function cam_left() {
+    send_message({
+        "command": "cam_left"
+    });
+}
+
+function cam_right() {
+    send_message({
+        "command": "cam_right"
     });
 }
 
